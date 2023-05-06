@@ -4,7 +4,8 @@ const crypto = require("crypto");
 const { HttpError } = require("../utils/HttpError");
 
 // const tasksPath = path.join(__dirname, "..", "db", "tasks.json");
-const tasksPath = path.join(process.cwd(), "db", "tasks.json");
+// const tasksPath = path.join(process.cwd(), "db", "tasks.json");
+const tasksPath = path.join(process.cwd(), "db/tasks.json");
 
 const getTasksService = async () => {
   const tasks = await fs.readFile(tasksPath);
