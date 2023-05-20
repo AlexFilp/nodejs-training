@@ -13,7 +13,10 @@ const schema = new Schema(
       minlength: 6,
       required: [true, "Password is required"],
     },
-    refreshToken: String,
+    refreshToken: {
+      type: String,
+      default: null,
+    },
   },
   { versionKey: false, timestamps: true }
 );

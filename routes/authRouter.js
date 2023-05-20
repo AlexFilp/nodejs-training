@@ -1,6 +1,12 @@
 const express = require("express");
-const { register, login, logout } = require("../controllers/authControllers");
+const {
+  register,
+  login,
+  getCurrent,
+  logout,
+} = require("../controllers/authControllers");
 
+const authenticate = require("../middlewares/authenticate");
 const validateBody = require("../utils/validateBody");
 const joiSchemas = require("../utils/validation/authValidationSchemas");
 
@@ -12,7 +18,10 @@ router.post(
   register
 );
 router.post("/login", validateBody(joiSchemas.loginValidationSchema), login);
-router.post("/logout", logout);
+
+router.get("/current", authenticate, getCurrent);
+
+router.post("/logout", authenticate, logout);
 
 module.exports = {
   authRouter: router,
