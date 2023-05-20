@@ -1,10 +1,12 @@
 const express = require("express");
 const { tasksRouter } = require("./routes/tasksRouter");
+const { authRouter } = require("./routes/authRouter");
 
 const app = express();
 
 app.use(express.json());
 
+app.use("/auth", authRouter);
 app.use("/tasks", tasksRouter);
 
 app.use((err, req, res, next) => {
@@ -17,5 +19,3 @@ app.use((err, req, res, next) => {
 module.exports = {
   app,
 };
-
-// "Something went wrong, please try again later"

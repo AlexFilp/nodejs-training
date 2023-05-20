@@ -6,11 +6,20 @@ const {
   updateTask,
   deleteTask,
 } = require("../controllers/tasksControllers");
+const validateBody = require("../utils/validateBody");
+const joiSchemas = require("../utils/validation/taskValidationSchemas");
 
 const router = express.Router();
 
-router.route("/").get(getTasks).post(createTask);
-router.route("/:taskId").get(getTask).patch(updateTask).delete(deleteTask);
+router
+  .route("/")
+  .get(getTasks)
+  .post(validateBody(joiSchemas.createTaskValidationSchema), createTask);
+router
+  .route("/:taskId")
+  .get(getTask)
+  .patch(validateBody(joiSchemas.updateTaskValidationSchema), updateTask)
+  .delete(deleteTask);
 
 // router.get("/", getTasks);
 
