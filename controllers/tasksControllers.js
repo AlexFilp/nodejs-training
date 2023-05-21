@@ -37,7 +37,10 @@ const deleteTask = catchAsyncWrapper(async (req, res) => {
   const { taskId } = req.params;
   const deletedTask = await deleteTaskService(taskId);
   //   res.sendStatus(204);
-  res.status(200).json(deletedTask);
+  res.status(200).json({
+    message: `Task with id ${taskId} was deleted`,
+    deletedTask: { title: deletedTask.title, completed: deletedTask.completed },
+  });
 });
 
 module.exports = {
