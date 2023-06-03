@@ -13,9 +13,9 @@ const register = catchAsyncWrapper(async (req, res) => {
 });
 
 const login = catchAsyncWrapper(async (req, res) => {
-  const user = await loginService(req.body);
+  const { user, accessToken } = await loginService(req.body);
   res.json({
-    token: user.refreshToken,
+    accessToken,
     email: user.email,
   });
 });

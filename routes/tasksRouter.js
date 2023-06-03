@@ -13,6 +13,7 @@ const validateBody = require("../utils/validateBody");
 const joiSchemas = require("../utils/validation/taskValidationSchemas");
 
 const router = express.Router();
+// router.use(authenticate);
 
 router
   .route("/")
