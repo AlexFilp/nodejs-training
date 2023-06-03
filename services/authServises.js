@@ -3,7 +3,7 @@ const User = require("../models/User");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 
-const { SECRET_KEY } = process.env;
+const asignTokens = require("../utils/asignTokens");
 
 const registerService = async (body) => {
   const user = await User.findOne({ email: body.email });
@@ -11,7 +11,9 @@ const registerService = async (body) => {
     throw new HttpError(409, "Email already in use");
   }
 
-  return await User.create(body);
+  const hashPass = await bcrypt.hash(body.password, 12);
+
+  return await User.create({ ...body, password: hashPass });
 };
 
 const loginService = async (body) => {
@@ -25,17 +27,18 @@ const loginService = async (body) => {
     throw new HttpError(401, "Email or password is wrong");
   }
 
-  const payload = {
-    id: user._id,
-  };
+  const { accessToken, refreshToken } = asignTokens(user);
 
-  const token = jwt.sign(payload, SECRET_KEY, { expiresIn: "23h" });
-
-  return await User.findByIdAndUpdate(
+  await User.findByIdAndUpdate(
     user._id,
-    { refreshToken: token },
+    { refreshToken: refreshToken },
     { new: true }
   );
+
+  return {
+    user,
+    accessToken,
+  };
 };
 
 const logoutService = async (id) => {
