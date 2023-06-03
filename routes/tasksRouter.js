@@ -7,27 +7,31 @@ const {
   deleteTask,
 } = require("../controllers/tasksControllers");
 
+const isValidId = require("../middlewares/isValidId");
+const authenticate = require("../middlewares/authenticate");
+const validateBody = require("../utils/validateBody");
+const joiSchemas = require("../utils/validation/taskValidationSchemas");
+
 const router = express.Router();
 
-router.route("/").get(getTasks).post(createTask);
-router.route("/:taskId").get(getTask).patch(updateTask).delete(deleteTask);
-
-// router.get("/", getTasks);
-
-// router.get("/:taskId", getTask);
-
-// router.post(
-//   "/",
-//   (req, res, next) => {
-//     console.log("HELLO FROM MIDDLEWARE!");
-//     next();
-//   },
-//   createTask
-// );
-
-// router.patch("/:taskId", updateTask);
-
-// router.delete("/:taskId", deleteTask);
+router
+  .route("/")
+  .get(authenticate, getTasks)
+  .post(
+    authenticate,
+    validateBody(joiSchemas.createTaskValidationSchema),
+    createTask
+  );
+router
+  .route("/:taskId")
+  .get(authenticate, isValidId, getTask)
+  .patch(
+    authenticate,
+    isValidId,
+    validateBody(joiSchemas.updateTaskValidationSchema),
+    updateTask
+  )
+  .delete(authenticate, isValidId, deleteTask);
 
 module.exports = {
   tasksRouter: router,
