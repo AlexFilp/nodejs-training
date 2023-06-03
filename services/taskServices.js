@@ -15,7 +15,7 @@ const getTasksService = async (page, limit, completed, userId) => {
 };
 
 const getTaskService = async (taskId, userId) => {
-  const task = await Task.findOne({ _id, taskId, owner: userId });
+  const task = await Task.findOne({ _id: taskId, owner: userId });
   if (!task) {
     throw new HttpError(404, "Task not found");
   }
